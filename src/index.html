@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>세탁물 분류·세탁 순서 최적화 플랫폼</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>세탁물 분류 · 세탁 순서 최적화</h1>
+  <p class="sub">2차시 옷 등록 화면 + 3차시 충돌 그래프</p>
+</header>
+
+<main>
+
+  <!-- ============ 2차시: 옷 등록 폼 ============ -->
+  <section class="card">
+    <h2>옷 등록</h2>
+
+    <form id="clothes-form">
+      <div class="grid">
+        <label>품목
+          <input type="text" id="item" placeholder="예: 면 티셔츠" required>
+        </label>
+
+        <label>소재
+          <select id="material">
+            <option>면</option>
+            <option>울</option>
+            <option>합성</option>
+            <option>혼방</option>
+          </select>
+        </label>
+
+        <label>색 계열
+          <select id="color-family">
+            <option>흰</option>
+            <option>검정</option>
+            <option>빨강</option>
+            <option>파랑</option>
+            <option>남색</option>
+            <option>회색</option>
+            <option>베이지</option>
+          </select>
+        </label>
+
+        <label>진하기
+          <select id="color-depth">
+            <option>연함</option>
+            <option>중간</option>
+            <option>진함</option>
+          </select>
+        </label>
+
+        <label>무게 (g)
+          <input type="number" id="weight" value="150" min="1" required>
+        </label>
+
+        <label>오염도 (1~5)
+          <select id="soil">
+            <option>1</option>
+            <option>2</option>
+            <option selected>3</option>
+            <option>4</option>
+            <option>5</option>
+          </select>
+        </label>
+
+        <label>물세탁 기호
+          <select id="wash-code"></select>
+        </label>
+
+        <label>탈수 기호
+          <select id="spin-code"></select>
+        </label>
+
+        <label>건조 기호
+          <select id="dry-code"></select>
+        </label>
+
+        <label class="check">
+          <input type="checkbox" id="is-new"> 새 옷 (이염 위험 높음)
+        </label>
+      </div>
+
+      <p id="symbol-info" class="info"></p>
+
+      <button type="submit">저장하기</button>
+    </form>
+  </section>
+
+  <!-- ============ 2차시: 등록 목록 ============ -->
+  <section class="card">
+    <h2>등록된 옷 <span id="count" class="count"></span></h2>
+    <div class="table-wrap">
+      <table id="clothes-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>품목</th>
+            <th>소재</th>
+            <th>색</th>
+            <th>무게</th>
+            <th>오염도</th>
+            <th>최고온도</th>
+            <th>탈수</th>
+            <th>건조</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ 3차시: 충돌 그래프 ============ -->
+  <section class="card">
+    <h2>충돌 그래프</h2>
+    <p class="hint">
+      같은 회차에 넣으면 안 되는 옷 쌍을 찾아 간선으로 잇습니다.
+      간선 수와 충돌 쌍 목록은 아래와 개발자 도구 콘솔(F12)에 함께 출력됩니다.
+    </p>
+    <button type="button" id="build-graph">충돌 그래프 만들기</button>
+    <div id="graph-result" class="result"></div>
+  </section>
+
+</main>
+
+<!-- data.js 가 먼저 와야 app.js 에서 데이터를 쓸 수 있다 -->
+<script src="../data/data.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
