@@ -10,12 +10,12 @@
 
 <header>
   <h1>세탁물 분류 · 세탁 순서 최적화</h1>
-  <p class="sub">2차시 옷 등록 화면 + 3차시 충돌 그래프</p>
+  <p class="sub">옷 등록 → 충돌 그래프 → 회차 분할 → 세탁 순서</p>
 </header>
 
 <main>
 
-  <!-- ============ 2차시: 옷 등록 폼 ============ -->
+  <!-- ============ 옷 등록 ============ -->
   <section class="card">
     <h2>옷 등록</h2>
 
@@ -27,30 +27,20 @@
 
         <label>소재
           <select id="material">
-            <option>면</option>
-            <option>울</option>
-            <option>합성</option>
-            <option>혼방</option>
+            <option>면</option><option>울</option><option>합성</option><option>혼방</option>
           </select>
         </label>
 
         <label>색 계열
           <select id="color-family">
-            <option>흰</option>
-            <option>검정</option>
-            <option>빨강</option>
-            <option>파랑</option>
-            <option>남색</option>
-            <option>회색</option>
-            <option>베이지</option>
+            <option>흰</option><option>검정</option><option>빨강</option><option>파랑</option>
+            <option>남색</option><option>회색</option><option>베이지</option>
           </select>
         </label>
 
         <label>진하기
           <select id="color-depth">
-            <option>연함</option>
-            <option>중간</option>
-            <option>진함</option>
+            <option>연함</option><option>중간</option><option>진함</option>
           </select>
         </label>
 
@@ -60,11 +50,7 @@
 
         <label>오염도 (1~5)
           <select id="soil">
-            <option>1</option>
-            <option>2</option>
-            <option selected>3</option>
-            <option>4</option>
-            <option>5</option>
+            <option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option>
           </select>
         </label>
 
@@ -91,22 +77,15 @@
     </form>
   </section>
 
-  <!-- ============ 2차시: 등록 목록 ============ -->
+  <!-- ============ 등록 목록 ============ -->
   <section class="card">
     <h2>등록된 옷 <span id="count" class="count"></span></h2>
     <div class="table-wrap">
       <table id="clothes-table">
         <thead>
           <tr>
-            <th>#</th>
-            <th>품목</th>
-            <th>소재</th>
-            <th>색</th>
-            <th>무게</th>
-            <th>오염도</th>
-            <th>최고온도</th>
-            <th>탈수</th>
-            <th>건조</th>
+            <th>#</th><th>품목</th><th>소재</th><th>색</th><th>무게</th>
+            <th>오염도</th><th>최고온도</th><th>탈수</th><th>건조</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -114,7 +93,22 @@
     </div>
   </section>
 
-  <!-- ============ 3차시: 충돌 그래프 ============ -->
+  <!-- ============ 세탁기 설정 ============ -->
+  <section class="card">
+    <h2>세탁기 설정</h2>
+    <div class="grid">
+      <label>세탁기 용량 (kg)
+        <input type="number" id="capacity" value="10" min="1" step="0.5">
+      </label>
+    </div>
+    <p class="hint">
+      코스 시간 가정 — 30도 이하이거나 섬세 코스면 <b>40분</b>, 40~50도는 <b>55분</b>, 60도 이상은 <b>80분</b>.
+      건조기는 기계건조가 가능한 옷의 무게만큼 1kg당 <b>15분</b>(최소 20분)으로 보고,
+      기계건조 가능한 옷이 하나도 없는 회차는 건조기를 쓰지 않습니다.
+    </p>
+  </section>
+
+  <!-- ============ 충돌 그래프 ============ -->
   <section class="card">
     <h2>충돌 그래프</h2>
     <p class="hint">
@@ -123,6 +117,27 @@
     </p>
     <button type="button" id="build-graph">충돌 그래프 만들기</button>
     <div id="graph-result" class="result"></div>
+  </section>
+
+  <!-- ============ 회차 분할과 비교 ============ -->
+  <section class="card">
+    <h2>회차 분할과 비교</h2>
+    <p class="hint">
+      충돌 제약 빈 패킹을 FFD(무게 내림차순 그리디)로 풀어 회차를 나누고,
+      관행적 분류(흰옷 / 색옷 / 수건)와 나란히 비교합니다.
+    </p>
+    <button type="button" id="run-pack">회차 나누고 비교하기</button>
+    <div id="pack-result" class="result"></div>
+  </section>
+
+  <!-- ============ 세탁 순서와 간트 차트 ============ -->
+  <section class="card">
+    <h2>세탁 순서와 간트 차트</h2>
+    <p class="hint">
+      세탁기 → 건조기 2단계 흐름 작업장으로 보고 존슨 규칙으로 회차 순서를 정합니다.
+      회차가 8개 이하면 모든 순서를 전부 돌려보고 존슨 규칙이 정말 최소인지도 확인합니다.
+    </p>
+    <div id="gantt-result" class="result"><p class="hint">위의 "회차 나누고 비교하기" 버튼을 먼저 누르세요.</p></div>
   </section>
 
 </main>
