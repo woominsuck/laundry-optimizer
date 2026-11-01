@@ -10,7 +10,8 @@
 
 <header>
   <h1>세탁물 분류 · 세탁 순서 최적화</h1>
-  <p class="sub">옷 등록 → 충돌 그래프 → 회차 분할 → 세탁 순서</p>
+  <p class="sub">옷 등록 → 충돌 그래프 → 회차 분할 → 세탁 순서 → 이력 비교</p>
+  <p id="db-status" class="db-status">데이터베이스 연결 확인 중…</p>
 </header>
 
 <main>
@@ -24,48 +25,39 @@
         <label>품목
           <input type="text" id="item" placeholder="예: 면 티셔츠" required>
         </label>
-
         <label>소재
           <select id="material">
             <option>면</option><option>울</option><option>합성</option><option>혼방</option>
           </select>
         </label>
-
         <label>색 계열
           <select id="color-family">
             <option>흰</option><option>검정</option><option>빨강</option><option>파랑</option>
             <option>남색</option><option>회색</option><option>베이지</option>
           </select>
         </label>
-
         <label>진하기
           <select id="color-depth">
             <option>연함</option><option>중간</option><option>진함</option>
           </select>
         </label>
-
         <label>무게 (g)
           <input type="number" id="weight" value="150" min="1" required>
         </label>
-
         <label>오염도 (1~5)
           <select id="soil">
             <option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option>
           </select>
         </label>
-
         <label>물세탁 기호
           <select id="wash-code"></select>
         </label>
-
         <label>탈수 기호
           <select id="spin-code"></select>
         </label>
-
         <label>건조 기호
           <select id="dry-code"></select>
         </label>
-
         <label class="check">
           <input type="checkbox" id="is-new"> 새 옷 (이염 위험 높음)
         </label>
@@ -80,12 +72,16 @@
   <!-- ============ 등록 목록 ============ -->
   <section class="card">
     <h2>등록된 옷 <span id="count" class="count"></span></h2>
+    <div class="btn-row">
+      <button type="button" id="seed-sample" class="ghost">표본 42벌 넣기</button>
+      <button type="button" id="clear-all" class="ghost danger">전체 비우기</button>
+    </div>
     <div class="table-wrap">
       <table id="clothes-table">
         <thead>
           <tr>
             <th>#</th><th>품목</th><th>소재</th><th>색</th><th>무게</th>
-            <th>오염도</th><th>최고온도</th><th>탈수</th><th>건조</th>
+            <th>오염도</th><th>최고온도</th><th>탈수</th><th>건조</th><th></th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -104,7 +100,8 @@
     <p class="hint">
       코스 시간 가정 — 30도 이하이거나 섬세 코스면 <b>40분</b>, 40~50도는 <b>55분</b>, 60도 이상은 <b>80분</b>.
       건조기는 기계건조가 가능한 옷의 무게만큼 1kg당 <b>15분</b>(최소 20분)으로 보고,
-      기계건조 가능한 옷이 하나도 없는 회차는 건조기를 쓰지 않습니다.
+      기계건조 가능한 옷이 없는 회차는 건조기를 쓰지 않습니다.
+      바꾼 용량은 데이터베이스에 저장되어 다음에 열 때도 유지됩니다.
     </p>
   </section>
 
@@ -125,6 +122,7 @@
     <p class="hint">
       충돌 제약 빈 패킹을 FFD(무게 내림차순 그리디)로 풀어 회차를 나누고,
       관행적 분류(흰옷 / 색옷 / 수건)와 나란히 비교합니다.
+      실행할 때마다 결과가 이력으로 저장됩니다.
     </p>
     <button type="button" id="run-pack">회차 나누고 비교하기</button>
     <div id="pack-result" class="result"></div>
@@ -140,9 +138,20 @@
     <div id="gantt-result" class="result"><p class="hint">위의 "회차 나누고 비교하기" 버튼을 먼저 누르세요.</p></div>
   </section>
 
+  <!-- ============ 실험 이력 ============ -->
+  <section class="card">
+    <h2>실험 이력</h2>
+    <p class="hint">
+      실행할 때마다 관행과 최적화의 결과가 데이터베이스에 쌓입니다.
+      옷을 추가하거나 세탁기 용량을 바꾼 뒤 다시 실행하면 변화를 비교할 수 있습니다.
+    </p>
+    <div id="history-result" class="result"></div>
+  </section>
+
 </main>
 
-<!-- data.js 가 먼저 와야 app.js 에서 데이터를 쓸 수 있다 -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="supabase-config.js"></script>
 <script src="../data/data.js"></script>
 <script src="app.js"></script>
 
