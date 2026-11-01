@@ -7,5 +7,5 @@
 
    secret key 는 절대 여기에 넣지 않는다.
    ===================================================================== */
-const SUPABASE_URL = 'https://wdinaocufdbylewdjvha.supabase.co';
+const SUPABASE_URL = 'https://wdinaocufdbylewdiyha.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_DxVp0quvAGrwoD5xnKUxqA_BIh6Qs3h';
